@@ -7,36 +7,42 @@ import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts } from '../redux/slices/posts';
+import { fetchPosts, fetchTags } from '../redux/slices/posts';
 
 export const Home = () => {
    const dispatch = useDispatch()
    const { posts, tags } = useSelector(state => state.posts)
    useEffect(() => {
       dispatch(fetchPosts())
+      dispatch(fetchTags())
    }, [])
 
+   let content
 
-   const isPostsLoading = posts.status === 'loading'
+   if (posts.status === 'loading') {
+      content = [...Array(5)].map((_, i) => (
+         <Post key={i} isLoading={true} />
+      ))
+   }
 
-   const loadingContent = [...Array(5)].map((_, i) => (
-      <Post key={i} isLoading={true} />
-   ))
-
-   const loadedContent = isPostsLoading || posts.items.map((post, i) => (
-      <Post
-         key={post._id}
-         id={post._id}
-         title={post.title}
-         imageUrl="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
-         user={post.user}
-         createdAt={post.createdAt}
-         viewsCount={post.viewsCount}
-         commentsCount={3}
-         tags={post.tags}
-         isEditable
-      />
-   ))
+   if (posts.status === 'loaded') {
+      content = posts.items.map((post, i) => {
+         return (
+            <Post
+               key={post._id}
+               id={post._id}
+               title={post.title}
+               imageUrl="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
+               user={post.user}
+               createdAt={post.createdAt}
+               viewsCount={post.viewsCount}
+               commentsCount={3}
+               tags={post.tags}
+               isEditable
+            />
+         )
+      })
+   }
 
 
    return (
@@ -47,10 +53,10 @@ export const Home = () => {
          </Tabs>
          <Grid container spacing={4}>
             <Grid xs={8} item>
-               {isPostsLoading ? loadingContent : loadedContent}
+               {content}
             </Grid>
             <Grid xs={4} item>
-               <TagsBlock items={['react', 'typescript', 'заметки']} isLoading={false} />
+               <TagsBlock items={tags.items} isLoading={tags.status === "loading" && true} />
                <CommentsBlock
                   items={[
                      {

@@ -1,16 +1,17 @@
-import React from "react";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 
 import styles from "./Login.module.scss";
 import { fetchAuth } from "../../redux/slices/auth";
 
 export const Login = () => {
    const dispatch = useDispatch()
+   const isAuth = useSelector(state => !!state.auth.data)
 
    const { register, handleSubmit, setError, formState: { errors, isValid } } = useForm({
       defaultValues: {
@@ -22,6 +23,10 @@ export const Login = () => {
 
    const onSubmit = (values) => {
       dispatch(fetchAuth(values))
+   }
+
+   if (isAuth) {
+      return <Navigate to="/" />
    }
 
    return (

@@ -13,7 +13,7 @@ export const Login = () => {
    const dispatch = useDispatch()
    const isAuth = useSelector(state => !!state.auth.data)
 
-   const { register, handleSubmit, setError, formState: { errors, isValid } } = useForm({
+   const { register, handleSubmit, formState: { errors, isValid } } = useForm({
       defaultValues: {
          email: 'ismayil@mail.ru',
          password: '12345'
@@ -23,8 +23,8 @@ export const Login = () => {
 
    const onSubmit = async (values) => {
       const data = await dispatch(fetchAuth(values))
-      if (!data.payload) {
-         return alert('Не удалось авторизоваться')
+      if (data.error) {
+         return alert(`Hе удалось авторизоваться. ${data.payload}`)
       }
 
       if ('token' in data.payload) {
@@ -52,13 +52,14 @@ export const Login = () => {
                fullWidth
             />
             <TextField
+               type="password"
                className={styles.field}
                label="Пароль"
                error={Boolean(errors.password?.message)}
                helperText={errors.password?.message}
                {...register('password', { required: 'Укажите пароль' })}
                fullWidth />
-            <Button type="submit" size="large" variant="contained" fullWidth>
+            <Button disabled={!isValid} type="submit" size="large" variant="contained" fullWidth>
                Войти
             </Button>
          </form>

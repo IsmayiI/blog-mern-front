@@ -1,9 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from '../../axios'
 
-export const fetchAuth = createAsyncThunk('auth/fetchAuth', async (params) => {
-   const { data } = await axios.post('/auth/login', params)
-   return data
+export const fetchAuth = createAsyncThunk('auth/fetchAuth', async (params, { rejectWithValue }) => {
+   try {
+      const { data } = await axios.post('/auth/login', params)
+      return data
+   } catch (err) {
+      if (err.response && err.response.data) {
+         return rejectWithValue(err.response?.data[0]?.msg || err.response.data?.message)
+      }
+      return rejectWithValue(err.message)
+   }
+})
+
+export const fetchRegister = createAsyncThunk('auth/fetchRegister', async (params, { rejectWithValue }) => {
+   try {
+      const { data } = await axios.post('/auth/register', params)
+      return data
+   } catch (err) {
+      if (err.response && err.response.data) {
+         return rejectWithValue(err.response?.data[0]?.msg || err.response.data?.message)
+      }
+      return rejectWithValue(err.message)
+   }
+
 })
 
 export const fetchAuthMe = createAsyncThunk('auth/fetchAuthMe', async () => {
@@ -47,6 +67,18 @@ const authSlice = createSlice({
          state.data = action.payload
       },
       [fetchAuthMe.rejected]: (state) => {
+         state.status = 'error'
+         state.data = null
+      },
+      [fetchRegister.pending]: (state) => {
+         state.status = 'loading'
+         state.data = null
+      },
+      [fetchRegister.fulfilled]: (state, action) => {
+         state.status = 'loaded'
+         state.data = action.payload
+      },
+      [fetchRegister.rejected]: (state) => {
          state.status = 'error'
          state.data = null
       },

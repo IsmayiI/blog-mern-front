@@ -9,6 +9,13 @@ import { logout } from '../../redux/slices/auth';
 export const Header = () => {
    const dispatch = useDispatch()
    const isAuth = useSelector(state => !!state.auth.data)
+   const fullName = useSelector(state => state.auth.data?.fullName)
+   let firstName = ''
+
+   if (fullName) {
+      [firstName] = fullName.split(" ");
+   }
+
 
    const onClickLogout = () => {
       if (window.confirm('Вы действительно хотите выйти?')) {
@@ -22,7 +29,7 @@ export const Header = () => {
          <Container maxWidth="lg">
             <div className={styles.inner}>
                <Link className={styles.logo} to="/">
-                  <div>ISMAYIL BLOG</div>
+                  <div>{firstName} БЛОГ</div>
                </Link>
                <div className={styles.buttons}>
                   {isAuth ? (

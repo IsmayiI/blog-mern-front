@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
@@ -7,10 +7,11 @@ import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import styles from './AddPost.module.scss';
 import { useSelector } from 'react-redux';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from '../../axios'
 
 export const AddPost = () => {
+   const { id } = useParams()
    const navigate = useNavigate()
    const isAuth = useSelector(state => !!state.auth.data)
    const [isLoading, setLoading] = useState(false)
@@ -19,6 +20,8 @@ export const AddPost = () => {
    const [tags, setTags] = useState([])
    const [imageUrl, setImageUrl] = useState('')
    const inputFileRef = useRef(null)
+
+   const isEditing = !!id
 
    const handleChangeFile = async (event) => {
       try {
@@ -52,11 +55,18 @@ export const AddPost = () => {
             imageUrl
          }
 
-         const { data } = await axios.post('/posts', fields)
+         let _id
 
-         const id = data._id
+         if (isEditing) {
+            await axios.patch(`/posts/${id}`, fields)
+            _id = id
+         }
+         else {
+            const { data } = await axios.post('/posts', fields)
+            _id = data._id
+         }
 
-         navigate(`/posts/${id}`)
+         navigate(`/posts/${_id}`)
 
       } catch (err) {
          console.warn(err)
@@ -65,6 +75,17 @@ export const AddPost = () => {
 
       setLoading(false)
    }
+
+   useEffect(() => {
+      if (id) {
+         axios.get(`/posts/${id}`).then(({ data }) => {
+            setTitle(data.title)
+            setText(data.text)
+            setTags(data.tags)
+            setImageUrl(data.imageUrl)
+         })
+      }
+   }, [])
 
    const options = useMemo(
       () => ({
@@ -85,6 +106,8 @@ export const AddPost = () => {
    if (!window.localStorage.getItem('token') && !isAuth) {
       return <Navigate to="/" />
    }
+
+
 
 
    return (
@@ -121,7 +144,7 @@ export const AddPost = () => {
          <SimpleMDE className={styles.editor} value={text} onChange={onChange} options={options} />
          <div className={styles.buttons}>
             <Button onClick={onSubmit} size="large" variant="contained">
-               Опубликовать
+               {isEditing ? 'Сохранить' : 'Опубликовать'}
             </Button>
             <a href="/">
                <Button size="large">Отмена</Button>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Grid from '@mui/material/Grid';
@@ -7,17 +7,35 @@ import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, fetchTags } from '../redux/slices/posts';
+import { fetchPosts, fetchTags, onSwitchFilter } from '../redux/slices/posts';
 
 export const Home = () => {
    const dispatch = useDispatch()
    const userData = useSelector(state => state.auth.data)
    const { posts, tags } = useSelector(state => state.posts)
+   const [isNew, setIsNew] = useState(false)
+   const [activeFilter, setActiveFilter] = useState(0)
 
    useEffect(() => {
       dispatch(fetchPosts())
       dispatch(fetchTags())
    }, [])
+
+   const onFilter = (filterName) => {
+      if (filterName === 'new' && activeFilter === 0) {
+         dispatch(onSwitchFilter(filterName))
+         setIsNew(prev => !prev)
+      }
+      if (filterName === 'new' && activeFilter === 1) {
+         setActiveFilter(0)
+      }
+
+      if (filterName === 'popular' && activeFilter === 0) {
+         dispatch(onSwitchFilter(filterName))
+         setActiveFilter(1)
+      }
+
+   }
 
 
    let content
@@ -27,6 +45,8 @@ export const Home = () => {
          <Post key={i} isLoading={true} />
       ))
    }
+
+
 
    if (posts.status === 'loaded') {
       content = posts.items.map((post, i) => {
@@ -50,9 +70,9 @@ export const Home = () => {
 
    return (
       <>
-         <Tabs style={{ marginBottom: 15 }} value={0} aria-label="basic tabs example">
-            <Tab label="Новые" />
-            <Tab label="Популярные" />
+         <Tabs style={{ marginBottom: 15 }} value={activeFilter} aria-label="basic tabs example">
+            <Tab onClick={() => onFilter('new')} label={isNew ? "Старые" : "Новые"} />
+            <Tab label="Популярные" onClick={() => onFilter('popular')} />
          </Tabs>
          <Grid container spacing={4}>
             <Grid xs={8} item>

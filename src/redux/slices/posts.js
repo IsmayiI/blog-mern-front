@@ -28,7 +28,17 @@ const initialState = {
 const postsSlice = createSlice({
    name: 'posts',
    initialState,
-   reducers: {},
+   reducers: {
+      onSwitchFilter: (state, action) => {
+         if (action.payload === 'new') {
+            state.posts.items.reverse()
+         }
+
+         if (action.payload === 'popular') {
+            state.posts.items.sort((a, b) => b.viewsCount - a.viewsCount)
+         }
+      }
+   },
    extraReducers: {
       [fetchPosts.pending]: (state) => {
          state.posts.items = []
@@ -61,3 +71,4 @@ const postsSlice = createSlice({
 })
 
 export const postsReducer = postsSlice.reducer
+export const { onSwitchFilter } = postsSlice.actions

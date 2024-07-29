@@ -31,6 +31,7 @@ export const FullPost = () => {
    }
 
 
+
    return (
       <>
          <Post

@@ -51,6 +51,7 @@ const postsSlice = createSlice({
       },
       [fetchPosts.fulfilled]: (state, action) => {
          state.posts.items = action.payload
+         state.posts.filterItems = []
          state.posts.status = 'loaded'
       },
       [fetchPosts.rejected]: (state) => {

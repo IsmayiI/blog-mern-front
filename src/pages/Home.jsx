@@ -50,6 +50,7 @@ export const Home = () => {
 
 
    if (posts.status === 'loaded') {
+      console.log(posts.filterItems, posts.items);
       let postsItems = posts.filterItems.length ? posts.filterItems : posts.items
       content = postsItems.map(post => (
          <Post

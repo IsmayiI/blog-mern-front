@@ -51,22 +51,21 @@ export const Home = () => {
 
    if (posts.status === 'loaded') {
       let postsItems = posts.filterItems.length ? posts.filterItems : posts.items
-      content = postsItems.map((post, i) => {
-         return (
-            <Post
-               key={post._id}
-               id={post._id}
-               title={post.title}
-               imageUrl={post.imageUrl && `http://localhost:4444${post.imageUrl}`}
-               user={post.user}
-               createdAt={post.createdAt}
-               viewsCount={post.viewsCount}
-               commentsCount={3}
-               tags={post.tags}
-               isEditable={userData?._id === post.user._id}
-            />
-         )
-      })
+      content = postsItems.map(post => (
+         <Post
+            key={post._id}
+            id={post._id}
+            title={post.title}
+            imageUrl={post.imageUrl && `http://localhost:4444${post.imageUrl}`}
+            user={post.user}
+            createdAt={post.createdAt}
+            viewsCount={post.viewsCount}
+            commentsCount={3}
+            tags={post.tags}
+            isEditable={userData?._id === post.user._id}
+         />
+      )
+      )
    }
 
 

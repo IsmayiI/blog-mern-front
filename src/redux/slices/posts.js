@@ -18,6 +18,7 @@ const initialState = {
    posts: {
       items: [],
       filterItems: [],
+      tagItems: [],
       status: 'loading'
    },
    tags: {
@@ -34,11 +35,14 @@ const postsSlice = createSlice({
          state.posts.filterItems = [...state.posts.items].reverse()
       },
       onFilterOldPosts: (state) => {
-         state.posts.filterItems = [...state.posts.items]
+         state.posts.filterItems = state.posts.items
       },
       onFilterPopularPosts: (state) => {
          state.posts.filterItems = [...state.posts.items].sort((a, b) => b.viewsCount - a.viewsCount)
-      }
+      },
+      onFilterTagPosts: (state, action) => {
+         state.posts.tagItems = state.posts.items.filter(post => post.tags.includes(action.payload))
+      },
    },
    extraReducers: {
       [fetchPosts.pending]: (state) => {
@@ -72,4 +76,4 @@ const postsSlice = createSlice({
 })
 
 export const postsReducer = postsSlice.reducer
-export const { onFilterNewPosts, onFilterOldPosts, onFilterPopularPosts } = postsSlice.actions
+export const { onFilterNewPosts, onFilterOldPosts, onFilterPopularPosts, onFilterTagPosts } = postsSlice.actions

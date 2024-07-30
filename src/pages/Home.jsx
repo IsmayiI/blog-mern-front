@@ -7,7 +7,7 @@ import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts, fetchTags, onSwitchFilter } from '../redux/slices/posts';
+import { fetchPosts, fetchTags, onFilterNewPosts, onFilterOldPosts, onFilterPopularPosts } from '../redux/slices/posts';
 
 export const Home = () => {
    const dispatch = useDispatch()
@@ -21,20 +21,21 @@ export const Home = () => {
       dispatch(fetchTags())
    }, [])
 
-   const onFilter = (filterName) => {
-      if (filterName === 'new' && activeFilter === 0) {
-         dispatch(onSwitchFilter(filterName))
-         setIsNew(prev => !prev)
+   const onFilterNewOrOld = () => {
+      if (!isNew) {
+         dispatch(onFilterNewPosts())
+         setIsNew(true)
       }
-      if (filterName === 'new' && activeFilter === 1) {
-         setActiveFilter(0)
+      if (isNew) {
+         dispatch(onFilterOldPosts())
+         setIsNew(false)
       }
+      setActiveFilter(0)
+   }
 
-      if (filterName === 'popular' && activeFilter === 0) {
-         dispatch(onSwitchFilter(filterName))
-         setActiveFilter(1)
-      }
-
+   const onFilterPopular = () => {
+      dispatch(onFilterPopularPosts())
+      setActiveFilter(1)
    }
 
 
@@ -49,7 +50,8 @@ export const Home = () => {
 
 
    if (posts.status === 'loaded') {
-      content = posts.items.map((post, i) => {
+      let postsItems = posts.filterItems.length ? posts.filterItems : posts.items
+      content = postsItems.map((post, i) => {
          return (
             <Post
                key={post._id}
@@ -71,8 +73,8 @@ export const Home = () => {
    return (
       <>
          <Tabs style={{ marginBottom: 15 }} value={activeFilter} aria-label="basic tabs example">
-            <Tab onClick={() => onFilter('new')} label={isNew ? "Старые" : "Новые"} />
-            <Tab label="Популярные" onClick={() => onFilter('popular')} />
+            <Tab onClick={onFilterNewOrOld} label={isNew ? "Старые" : "Новые"} />
+            <Tab label="Популярные" onClick={onFilterPopular} />
          </Tabs>
          <Grid container spacing={4}>
             <Grid xs={8} item>

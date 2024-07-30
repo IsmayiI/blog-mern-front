@@ -26,7 +26,7 @@ function App() {
                <Route path='/add-post' element={<AddPost />} />
                <Route path='/login' element={<Login />} />
                <Route path='/register' element={<Registration />} />
-               <Route path='/tags/:tag' element={<TagPosts />} />
+               <Route path='/tag/:tag' element={<TagPosts />} />
             </Routes>
          </Container>
       </>

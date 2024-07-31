@@ -5,32 +5,42 @@ import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
 import axios from "../axios";
+import { addPostCommentsCount, fetchPostComments } from "../redux/slices/posts";
+import { useDispatch } from "react-redux";
 
 export const FullPost = () => {
+   const dispatch = useDispatch()
    const [post, setPost] = useState()
+   const [comments, setComments] = useState([])
    const [isLoading, setIsLoading] = useState(true)
 
    const params = useParams()
 
    const fetchPost = async () => {
       try {
-         const { data } = await axios.get(`posts/${params.id}`)
-         setPost(data)
+         const { data: postData } = await axios.get(`posts/${params.id}`)
+         const { data: commentData } = await axios.get(`/comments/${params.id}`)
+         setPost(postData)
+         setComments(commentData)
          setIsLoading(false)
       } catch (err) {
          console.warn(err)
       }
    }
 
+
+
    useEffect(() => {
       fetchPost()
    }, [])
 
+   useEffect(() => {
+      dispatch(addPostCommentsCount(comments.length))
+   }, [comments.length])
+
    if (isLoading) {
       return <Post isLoading={true} />
    }
-
-
 
    return (
       <>
@@ -41,7 +51,7 @@ export const FullPost = () => {
             user={post.user}
             createdAt={post.createdAt}
             viewsCount={post.viewsCount}
-            commentsCount={3}
+            commentsCount={comments.length}
             tags={post.tags}
             isFullPost
          >
@@ -50,6 +60,12 @@ export const FullPost = () => {
             </p>
          </Post>
          <CommentsBlock
+            items={comments}
+            isLoading={false}
+         >
+            <Index postId={params.id} setComments={setComments} />
+         </CommentsBlock>
+         {/* <CommentsBlock
             items={[
                {
                   user: {
@@ -69,7 +85,7 @@ export const FullPost = () => {
             isLoading={false}
          >
             <Index />
-         </CommentsBlock>
+         </CommentsBlock> */}
       </>
    );
 };

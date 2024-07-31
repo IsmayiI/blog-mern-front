@@ -12,6 +12,7 @@ export const fetchTags = createAsyncThunk('posts/fetchTags', async () => {
    return data
 })
 
+
 export const fetchDeletePost = createAsyncThunk('posts/fetchDeletePost', async (id) => await axios.delete(`/posts/${id}`))
 
 const initialState = {
@@ -19,9 +20,14 @@ const initialState = {
       items: [],
       filterItems: [],
       tagItems: [],
+      comments: [],
       status: 'loading'
    },
    tags: {
+      items: [],
+      status: 'loading'
+   },
+   comments: {
       items: [],
       status: 'loading'
    }
@@ -43,8 +49,12 @@ const postsSlice = createSlice({
       onFilterTagPosts: (state, action) => {
          state.posts.tagItems = state.posts.items.filter(post => post.tags.includes(action.payload))
       },
+      addPostCommentsCount: (state, action) => {
+         state.posts.items = state.posts.items.map(post => ({ ...post, commentsCount: action.payload }))
+      }
    },
    extraReducers: {
+      // Posts
       [fetchPosts.pending]: (state) => {
          state.posts.items = []
          state.posts.status = 'loading'
@@ -58,6 +68,8 @@ const postsSlice = createSlice({
          state.posts.items = []
          state.posts.status = 'error'
       },
+
+      // Tags
       [fetchTags.pending]: (state) => {
          state.tags.items = []
          state.tags.status = 'loading'
@@ -70,11 +82,13 @@ const postsSlice = createSlice({
          state.tags.items = []
          state.tags.status = 'error'
       },
+
+      // Delete Post
       [fetchDeletePost.pending]: (state, action) => {
          state.posts.items = state.posts.items.filter(post => post._id !== action.meta.arg)
-      }
+      },
    }
 })
 
 export const postsReducer = postsSlice.reducer
-export const { onFilterNewPosts, onFilterOldPosts, onFilterPopularPosts, onFilterTagPosts } = postsSlice.actions
+export const { onFilterNewPosts, onFilterOldPosts, onFilterPopularPosts, onFilterTagPosts, addPostCommentsCount } = postsSlice.actions

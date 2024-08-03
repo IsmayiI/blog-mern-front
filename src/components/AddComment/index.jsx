@@ -25,7 +25,6 @@ export const Index = ({ postId, setComments }) => {
       const { data: comment } = await axios.post('/comments', params)
       setComments(prevComments => [...prevComments, { ...comment, user }])
       reset()
-      // window.location.reload();
    }
 
    return (

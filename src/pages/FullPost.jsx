@@ -7,6 +7,7 @@ import { CommentsBlock } from "../components/CommentsBlock";
 import axios from "../axios";
 import { addPostCommentsCount, fetchPostComments } from "../redux/slices/posts";
 import { useDispatch } from "react-redux";
+import { getDate } from "../utils/getDate";
 
 export const FullPost = () => {
    const dispatch = useDispatch()
@@ -19,8 +20,9 @@ export const FullPost = () => {
    const fetchPost = async () => {
       try {
          const { data: postData } = await axios.get(`posts/${params.id}`)
+         const updatePost = { ...postData, createdAt: getDate(postData.createdAt) }
          const { data: commentData } = await axios.get(`/comments/${params.id}`)
-         setPost(postData)
+         setPost(updatePost)
          setComments(commentData)
          setIsLoading(false)
       } catch (err) {

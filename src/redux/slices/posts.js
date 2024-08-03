@@ -90,6 +90,20 @@ const postsSlice = createSlice({
          state.tags.status = 'error'
       },
 
+      // Comments
+      [fetchComments.pending]: (state) => {
+         state.comments.items = []
+         state.comments.status = 'loading'
+      },
+      [fetchComments.fulfilled]: (state, action) => {
+         state.comments.items = action.payload
+         state.comments.status = 'loaded'
+      },
+      [fetchComments.rejected]: (state) => {
+         state.comments.items = []
+         state.comments.status = 'error'
+      },
+
       // Delete Post
       [fetchDeletePost.pending]: (state, action) => {
          state.posts.items = state.posts.items.filter(post => post._id !== action.meta.arg)

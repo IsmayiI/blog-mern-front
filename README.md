@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# Countries
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Blog-mern is a full-stack MERN (MongoDB, Express, React, Node.js) application designed to enhance my practice with full-stack development. The application enables users to register, log in, create, update, delete, and comment on posts. It also features robust filtering and sorting options to improve the user experience.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- User Authentication and Authorization: Register and log in to access the full features of the application.
+- Create, Update, Delete Posts: Authenticated users can create posts with a title, image, tags, and text, update their own posts, and delete them.
+- Commenting System: Users can view and comment on posts, but only the post creator can modify or delete them.
+- Post Filtering: Filter posts by date (newest or oldest) and popularity (based on the number of views).
+- Post Details: View detailed information about each post, including the number of views and comments.
+- Tag Search: Search for posts by tags, with the latest five tags displayed on the homepage for easy access.
+- Routing and Navigation: Utilize React Router for seamless page navigation.
+- Global State Management: Manage application state with Redux Toolkit.
+- Form Handling: Implement forms with React Hook Form and validate with Express Validator.
+- Image Uploads: Upload images for posts using Multer.
+- JWT Authentication: Secure user authentication with JSON Web Token (JWT).
+- Password Encryption: Encrypt passwords with bcrypt.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Frontend
+- React
+- React Router
+- Redux Toolkit
+- React Hook Form
+- Axios
+- Material-UI
+- Emotion (for styled components)
+- React SimpleMDE Editor
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Backend
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JWT
+- Express Validator
+- Multer
+- bcrypt
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Project Link
+- Live Site: https://blog-mern-front-virid.vercel.app
+- Backend Repository: https://github.com/IsmayiI/blog-mern-back

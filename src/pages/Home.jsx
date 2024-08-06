@@ -82,10 +82,10 @@ export const Home = () => {
             </Grid>
             <Grid xs={4} item>
                <TagsBlock items={tags.items} isLoading={tags.status === "loading" && true} />
-               <CommentsBlock
+               {/* <CommentsBlock
                   items={comments.items}
                   isLoading={comments.status === "loading" && true}
-               />
+               /> */}
             </Grid>
          </Grid>
       </>

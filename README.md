@@ -1,4 +1,4 @@
-# Countries
+# Blog
 
 Blog-mern is a full-stack MERN (MongoDB, Express, React, Node.js) application designed to enhance my practice with full-stack development. The application enables users to register, log in, create, update, delete, and comment on posts. It also features robust filtering and sorting options to improve the user experience.
 
